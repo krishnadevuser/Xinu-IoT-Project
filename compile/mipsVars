@@ -1,0 +1,31 @@
+MIPS_ROOT = /usr/local/bin/
+MIPS_PREFIX = arm-none-eabi-
+
+COMPILER_ROOT = ${MIPS_ROOT}/${MIPS_PREFIX}
+
+CC       = ${COMPILER_ROOT}gcc
+CPP      = ${COMPILER_ROOT}cpp
+LD       = ${COMPILER_ROOT}ld
+AS       = ${COMPILER_ROOT}as
+AR       = ${COMPILER_ROOT}ar
+MAKEDEP  = `which makedepend`
+
+DOCGEN   = doxygen
+
+# DETAIL   = -DDETAIL
+
+DEFS     =
+INCLUDE  = -I../include
+
+#flag for producing GDB debug information
+BUGFLAG = -ggdb
+
+CFLAGS = -O0 -Wall -Werror -Wstrict-prototypes -Wno-trigraphs            \
+             -nostdinc -fno-builtin -fno-strict-aliasing -fno-common \
+         -fomit-frame-pointer -fno-pic -ffunction-sections -G 0  \
+         -mlong-calls -mno-abicalls -mabi=32 -march=mips32       \
+         -Wa,-32 -Wa,-march=mips32 -Wa,-mips32 -Wa,--trap        \
+         ${DEBUG} ${INCLUDE} ${DETAIL} ${DEFS} -c
+
+
+ASFLAGS  = ${INCLUDE} ${DEBUG} -march=mips32 -mips32
