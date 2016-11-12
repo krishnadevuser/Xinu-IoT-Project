@@ -2,7 +2,6 @@
 /* GPIOCSR.h - definitions for trivial file transfer protocol */
 
 
-
 struct	gpio_csreg
 {
 	volatile uint32	rev[4];	/* GPIO_REVISION		*/
@@ -34,9 +33,5 @@ struct	gpio_csreg
 	volatile uint32 set_data_out;  /* GPIO_SETDATAOUT */
 };
 
-
-struct gpiocblk {
-	uint32 buf;
-};
 
 

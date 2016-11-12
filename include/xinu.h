@@ -13,6 +13,7 @@
 #include <ports.h>
 #include <uart.h>
 #include <tty.h>
+#include <gpio.h>
 #include <gpiocsr.h>
 #include <device.h>
 #include <interrupt.h>
