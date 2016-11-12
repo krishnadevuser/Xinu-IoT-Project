@@ -13,6 +13,7 @@
 #include <ports.h>
 #include <uart.h>
 #include <tty.h>
+#include <gpiocsr.h>
 #include <device.h>
 #include <interrupt.h>
 #include <file.h>
@@ -21,7 +22,6 @@
 #include <lfilesys.h>
 #include <spi.h>
 #include <ether.h>
-#include <gpio.h>
 #include <net.h>
 #include <ip.h>
 #include <arp.h>
