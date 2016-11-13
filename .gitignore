@@ -1,0 +1,22 @@
+.defs
+	.gitignore
+	.vers_num
+	binaries/
+	version
+	xinu
+	xinu.bin
+	xinu.elf
+	xinu.map
+	../config/config
+compile/.gitignore
+	compile/.vers_num
+	compile/binaries/
+	compile/version
+	compile/xinu
+	compile/xinu.bin
+	compile/xinu.elf
+	compile/xinu.map
+	config/config
+compile/
+config/cinfig
+config/config
