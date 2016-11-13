@@ -558,8 +558,8 @@ extern	devcall	ttyread(struct dentry *, char *, int32);
 extern	devcall	ttywrite(struct dentry *, char *, int32);
 
 /* in gpiohandler_out.c*/
-extern void	gpiohandle_out(struct gpiocblk *gpioptr,struct gpio_csreg *csrptr);
-extern devcall	gpioinit(struct dentry	*devptr);
+extern void		gpiohandle_out(struct gpiocblk *gpioptr,struct gpio_csreg *csrptr);
+extern void		gpioinit( void);
 
 /* in file udp.c */
 
