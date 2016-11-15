@@ -60,6 +60,13 @@ struct	adc_csreg
 	volatile uint32 fifo_1_cnt;
 	volatile uint32 fifo_1_thld;
 	volatile uint32 dma_1_req[2];
-	volatile uint32 fifo_0_data[40];
-	volatile uint32 fifo_1_data[40];
+	volatile uint32 fifo_0_data[64];
+	volatile uint32 fifo_1_data[64];
 };
+
+
+
+#define ADC_IIR_IRQ	0x01	/* Interrupt pending bit		*/
+#define ADC_IIR_IDMASK 0x0E	/* 3-bit field for interrupt ID		*/
+#define ADC_F0_OVERRUN 0x08	/* Reset transmit FIFO			*/
+#define ADC_ASYNC 0x400	/* Reset transmit FIFO			*/

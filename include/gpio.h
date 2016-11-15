@@ -17,7 +17,7 @@ struct	gpiocblk	{			/* Tty line control block	*/
 
 
 #ifndef	ADC_BUFLEN
-#define	ADC_BUFLEN	128		/* Num. chars in input queue	*/
+#define	ADC_BUFLEN	64		/* Num. chars in input queue	*/
 #endif
 
 
@@ -38,5 +38,6 @@ struct	adccblk	{			/* Tty line control block	*/
 };
 
 extern	struct	gpiocblk	gpiotab[];
+extern struct	adccblk	adctab[];
 extern unsigned int* PortIDSet_ptr[2];
 

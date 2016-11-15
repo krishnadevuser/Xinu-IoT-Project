@@ -202,6 +202,11 @@ devcall	adcinit(
     }
 
 
+    if (adcptr->work_mode == BBBIO_ADC_WORK_MODE_TIMER_INT){
+   		 aptr->irq_e_set = ADC_IIR_IRQ | ADC_ASYNC | ADC_F0_OVERRUN;
+	}
+
+
 
 	/* Initialize values in the adc control block */
 	return OK;
