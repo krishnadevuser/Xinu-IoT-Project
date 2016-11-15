@@ -560,6 +560,7 @@ extern	devcall	ttywrite(struct dentry *, char *, int32);
 /* in gpiohandler_out.c*/
 extern void		gpiohandle_out(struct gpiocblk *gpioptr,struct gpio_csreg *csrptr);
 extern void		gpioinit( void);
+extern int adc_channel_status(volatile uint32	*st_en, int chn_ID , int enable);
 
 /* in file udp.c */
 
