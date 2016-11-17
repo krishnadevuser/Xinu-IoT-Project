@@ -189,6 +189,10 @@ devcall	adcinit(
 	*reg =0;
 	*reg |= ((adcptr->sample_dly - 1) << 24 | adcptr->open_dly);
 
+	if (adcptr->work_mode == BBBIO_ADC_WORK_MODE_TIMER_INT){
+   		 aptr->irq_e_set = ADC_IIR_IRQ | ADC_ASYNC | ADC_F0_OVERRUN;
+	}
+
 	/* resume step config register protection*/
 	aptr->ctrl &= ~0x4 ;
 
@@ -200,11 +204,6 @@ devcall	adcinit(
     for(i = 0 ; i < aptr->fifo_1_cnt ; i++) {
 		FIFO_data = aptr->fifo_1_data;
     }
-
-
-    if (adcptr->work_mode == BBBIO_ADC_WORK_MODE_TIMER_INT){
-   		 aptr->irq_e_set = ADC_IIR_IRQ | ADC_ASYNC | ADC_F0_OVERRUN;
-	}
 
 
 
