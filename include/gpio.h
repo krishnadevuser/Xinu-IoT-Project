@@ -9,9 +9,17 @@
 
 
 
+#ifndef	GPIO_BUFLEN
+#define	GPIO_BUFLEN	3		/* Num. chars in input queue	*/
+#endif
+
 struct	gpiocblk	{			/* Tty line control block	*/
 	char	port;		/* Next input char to read	*/
 	char	pin;		/* Next slot for arriving char	*/
+	char	*gpiohead;		/* Next input char to read	*/
+	char	*gpiotail;		/* Next slot for arriving char	*/
+	char	gpiobuf[GPIO_BUFLEN];	/* Input buffer (holds one line)*/
+	
 };
 
 

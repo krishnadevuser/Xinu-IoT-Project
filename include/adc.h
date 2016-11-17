@@ -67,6 +67,7 @@ struct	adc_csreg
 
 
 #define ADC_IIR_IRQ	0x01	/* Interrupt pending bit		*/
+#define ADC_READY	0x02	/* Interrupt pending bit		*/
 #define ADC_IIR_IDMASK 0x0E	/* 3-bit field for interrupt ID		*/
 #define ADC_F0_OVERRUN 0x08	/* Reset transmit FIFO			*/
 #define ADC_ASYNC 0x400	/* Reset transmit FIFO			*/
