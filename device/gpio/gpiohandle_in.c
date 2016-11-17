@@ -15,9 +15,9 @@ char gpiohandle_in(
 	)
 {
 
-	printf("gpio_addr= %x , val = %u" , csrptr, ~(PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]));
+	//printf("gpio_addr= %x , val = %u" , csrptr, ~(PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]));
 	csrptr->oe |= (PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]);
-	printf("csrptr->oe = %x , value = %u", &csrptr->oe, csrptr->oe);
+	//printf("csrptr->oe = %x , value = %u", &csrptr->oe, csrptr->oe);
 	if ((csrptr->data_in & PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]));
 	{
 		return 1;
