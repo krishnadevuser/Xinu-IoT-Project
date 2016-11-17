@@ -30,6 +30,11 @@ const unsigned int p9_PortIDSet[]={0,	0,	0,	0,	0,	0,	0,	0,
  *------------------------------------------------------------------------
  */
  unsigned int* PortIDSet_ptr[2];
+
+
+
+
+
 void 	gpioinit( void)
 {
 
@@ -37,5 +42,21 @@ void 	gpioinit( void)
 	
 	PortIDSet_ptr[0]=(unsigned int*)p8_PortIDSet;
 	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
+}
+
+void gpioint_en (
+	 struct	gpiocblk *gpioptr,	/* Ptr to gpiotab entry		*/
+	 struct	gpio_csreg *csrptr	/* Address of GPIO's CSRs	*/
+	)
+{
+	if (gpioptr->int_mode) {
+	csrptr->rise_det &= PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+	csrptr->fall_det &= PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+	}
+	else {
+	csrptr->rise_det &= ~PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+	csrptr->fall_det &= ~PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+	}
+	
 }
 
