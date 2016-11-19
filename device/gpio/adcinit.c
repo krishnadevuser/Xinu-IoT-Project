@@ -145,8 +145,19 @@ devcall	adcinit(
 	unsigned int FIFO_count = 0;
 	unsigned int FIFO_data = 0;
 	int i =0;
+	return OK;
+	adcptr = &adctab[ devptr->dvminor ];
 
-	adcptr = &ttytab[ devptr->dvminor ];
+	//////////////////////////
+	adcptr->adchead = adcptr->adctail = 	/* Set up input queue	*/
+	&adcptr->adcbuf[0];		/*    as empty		*/
+	adcptr->sem = semcreate(0);		/* Input semaphore	*/
+	adcptr->clkdiv = 160 ;
+	adcptr->chn_ID = 1 ;
+	adcptr->open_dly = 0;
+	adcptr->sample_dly = 1;
+
+	///////////////////////////////
 
 	aptr = (struct adc_csreg *)devptr->dvcsr;
 

@@ -32,31 +32,93 @@ const unsigned int p9_PortIDSet[]={0,	0,	0,	0,	0,	0,	0,	0,
  unsigned int* PortIDSet_ptr[2];
 
 
-
-
-
-void 	gpioinit( void)
-{
-
-	/* Initialize mapping of port and reg value for GPIO */
-	
-	PortIDSet_ptr[0]=(unsigned int*)p8_PortIDSet;
-	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
-}
-
 void gpioint_en (
 	 struct	gpiocblk *gpioptr,	/* Ptr to gpiotab entry		*/
 	 struct	gpio_csreg *csrptr	/* Address of GPIO's CSRs	*/
 	)
 {
 	if (gpioptr->int_mode) {
-	csrptr->rise_det &= PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
-	csrptr->fall_det &= PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+		csrptr->rise_det = PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+		csrptr->fall_det = PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+		csrptr->irq_s_set_0 = PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
 	}
 	else {
-	csrptr->rise_det &= ~PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
-	csrptr->fall_det &= ~PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+		csrptr->rise_det &= ~PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+		csrptr->fall_det &= ~PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
+		csrptr->irq_s_clr_0 = PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1];
 	}
 	
 }
+
+
+devcall	gpioinit(
+	  struct dentry	*devptr		/* Entry in device switch table	*/
+	)
+{
+	struct	gpiocblk	*gpioptr;		/* Pointer to ttytab entry	*/
+	struct	gpio_csreg *gptr;	/* Address of UART's CSRs	*/
+	/* Initialize mapping of port and reg value for GPIO */
+	PortIDSet_ptr[0]=(unsigned int*)p8_PortIDSet;
+	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
+	gpioptr = &gpiotab[ devptr->dvminor ];
+	gptr = (struct gpio_csreg *)devptr->dvcsr;
+
+	//////////////////////////
+	if(devptr->dvminor == 0) {
+		gpioptr->port = 8;
+		gpioptr->pin = 12;
+	} else {
+		gpioptr->port = 8;
+		gpioptr->pin = 11;
+		gpioptr->int_mode = 1;
+	}
+	gpioptr->gpiohead = gpioptr->gpiotail = &gpioptr->gpiobuf[0];	
+	*gpioptr->gpiohead = 1;
+	gpioptr->sem = semcreate(0);		/* Input semaphore	*/
+	if (gpioptr->int_mode ) {
+		set_evec( devptr->dvirq, (uint32)devptr->dvintr );
+		gpioint_en(gpioptr,gptr);
+	}
+
+
+	if(devptr->dvminor == 0) {
+		gpiohandle_out(gpioptr,gptr); //for testing
+	} 
+	return OK;
+}
+
+
+devcall	diginit(
+	  struct dentry	*devptr		/* Entry in device switch table	*/
+	)
+{
+	struct	gpiocblk	*gpioptr;		/* Pointer to ttytab entry	*/
+	struct	gpio_csreg *gptr;	/* Address of UART's CSRs	*/
+	/* Initialize mapping of port and reg value for GPIO */
+	PortIDSet_ptr[0]=(unsigned int*)p8_PortIDSet;
+	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
+	gpioptr = &gpiotab[ devptr->dvminor ];
+	gptr = (struct gpio_csreg *)devptr->dvcsr;
+
+	//////////////////////////
+	
+	gpioptr->port = 8;
+	gpioptr->pin = 11;
+	gpioptr->int_mode = 1;
+	gpioptr->gpiohead = gpioptr->gpiotail = &gpioptr->gpiobuf[0];	
+	*gpioptr->gpiohead = 1;
+	gpioptr->sem = semcreate(0);		/* Input semaphore	*/
+	if (gpioptr->int_mode ) {
+		set_evec( devptr->dvirq, (uint32)devptr->dvintr );
+		gpioint_en(gpioptr,gptr);
+	}
+
+	return OK;
+
+	///////////////////////////////
+
+	
+}
+
+
 
