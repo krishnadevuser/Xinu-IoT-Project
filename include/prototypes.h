@@ -566,6 +566,8 @@ extern int adc_channel_status(volatile uint32	*st_en, int chn_ID , int enable);
 extern char gpiohandler(uint32 xnum);
 extern devcall	adcinit( struct dentry	*devptr	);
 extern void adchandler(uint32 xnum);
+extern devcall gpiopush(struct dentry *devptr, bool8 ch);
+extern devcall gpio_pull(struct dentry *devptr);
 
 /* in file udp.c */
 

@@ -105,7 +105,7 @@ spi:
 gpio:
 	on gpio1
 		-i gpioinit	-o ionull	-c ionull
-		-r ionull	-g ionull	-p ionull
+		-r ionull	-g gpio_pull	-p gpiopush
 		-w ionull	-s ionull	-n ionull
 		-intr gpiohandler
 

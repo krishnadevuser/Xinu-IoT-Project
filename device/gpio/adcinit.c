@@ -114,7 +114,7 @@ struct	adccblk	adctab[Nadc];
 
 int adc_channel_status(volatile uint32	*st_en, int chn_ID , int enable)
 {
-	unsigned int *reg = NULL;
+	//unsigned int *reg = NULL;
 
 	if((chn_ID < 0) || (chn_ID > 6)) {
 		return 0;
@@ -142,7 +142,7 @@ devcall	adcinit(
 	struct	adccblk	*adcptr;		/* Pointer to ttytab entry	*/
 	struct	adc_csreg *aptr;	/* Address of UART's CSRs	*/
 	unsigned int *reg = NULL;
-	unsigned int FIFO_count = 0;
+	//unsigned int FIFO_count = 0;
 	unsigned int FIFO_data = 0;
 	int i =0;
 	return OK;
@@ -156,7 +156,11 @@ devcall	adcinit(
 	adcptr->chn_ID = 1 ;
 	adcptr->open_dly = 0;
 	adcptr->sample_dly = 1;
+	adcptr->mode = BBBIO_ADC_STEP_MODE_SW_CONTINUOUS;
+	adcptr->sample_avg = BBBIO_ADC_STEP_AVG_1;
 
+	//adcptr->work_mode == 1;
+	
 	///////////////////////////////
 
 	aptr = (struct adc_csreg *)devptr->dvcsr;
@@ -164,7 +168,6 @@ devcall	adcinit(
 	reg = (void *)BBBIO_CM_PER_ADDR + BBBIO_CM_WKUP_OFFSET_FROM_CM_PER +  BBBIO_CM_WKUP_ADC_TSC_CLKCTRL;
 	*reg = 0x2 ;
 
-	/* Pre-disable module work */
 	aptr->ctrl &= ~0x1 ;
 	if((adcptr->clkdiv < 1) || (adcptr->clkdiv > 65535)) {
 		aptr->clkdiv = 1;
@@ -175,11 +178,11 @@ devcall	adcinit(
 
 	aptr->range |= (adcptr->L_range | adcptr->H_range << 16) ;
 
-	if((adcptr->chn_ID > BBBIO_ADC_AIN6) || (adcptr->chn_ID < BBBIO_ADC_AIN0) ||
+	/*if((adcptr->chn_ID > BBBIO_ADC_AIN6) || (adcptr->chn_ID < BBBIO_ADC_AIN0) ||
 	   (adcptr->sample_avg > BBBIO_ADC_STEP_AVG_16) || (adcptr->sample_avg < BBBIO_ADC_STEP_AVG_1) ||
 	   (adcptr->open_dly > 262143) || (adcptr->open_dly < 0) || (adcptr->sample_dly > 255) || (adcptr->sample_dly < 1)){
 		return SYSERR;
-	}
+	}*/
 
 	/* Disable channel step*/
 	aptr->st_en &= ~(0x0001 << (adcptr->chn_ID+1));
@@ -188,20 +191,28 @@ devcall	adcinit(
 	aptr->ctrl |= 0x4 ;
 
 	/* set step config */
-	reg = (void *)(aptr->st_cnf1 + (adcptr->chn_ID * 0x8));
+	
+	reg = (void *)(&aptr->st_cnf1 + (adcptr->chn_ID * 0x8));
 	*reg &= ~(0x1F) ;	/* pre-maks Mode filed */
+	
 	*reg |= (adcptr->mode | (adcptr->sample_avg << 2) | (adcptr->chn_ID << 19) | (adcptr->chn_ID << 15) | ((adcptr->chn_ID % 2) << 26) );
-
+	
 	/* set open delay */
 	if(adcptr->open_dly <0 || adcptr->open_dly >262143) {
 		adcptr->open_dly = 0;
 	}
-	reg = (void *)aptr->st_dly1 + adcptr->chn_ID * 0x8;
+
+	reg = (void *)(&aptr->st_dly1 + adcptr->chn_ID * 0x8);
 	*reg =0;
 	*reg |= ((adcptr->sample_dly - 1) << 24 | adcptr->open_dly);
-
-	if (adcptr->work_mode == BBBIO_ADC_WORK_MODE_TIMER_INT){
-   		 aptr->irq_e_set = ADC_IIR_IRQ | ADC_ASYNC | ADC_F0_OVERRUN;
+	if (adcptr->work_mode == 1){
+		/*if(devptr==NULL)
+			kprintf("devptr =NULLL \n");
+		if(devptr->dvintr==NULL) kprintf(" pointer is null");
+		if (devptr && devptr->dvintr)
+			kprintf("devptr->dvirq = %x , devptr->dvirq = %u",devptr->dvintr, (uint32)devptr->dvirq);*/
+		//set_evec( devptr->dvirq, (uint32)devptr->dvintr );
+   		aptr->irq_e_set = ADC_IIR_IRQ | ADC_ASYNC | ADC_F0_OVERRUN;
 	}
 
 	/* resume step config register protection*/
@@ -209,13 +220,12 @@ devcall	adcinit(
 
 
 	for(i = 0 ; i < aptr->fifo_cnt ; i++) {
-		FIFO_data = aptr->fifo_0_data;
+		FIFO_data =(unsigned int ) aptr->fifo_0_data;
 	}
 
     for(i = 0 ; i < aptr->fifo_1_cnt ; i++) {
-		FIFO_data = aptr->fifo_1_data;
+		FIFO_data =(unsigned int ) aptr->fifo_1_data;
     }
-
 
 
 	/* Initialize values in the adc control block */

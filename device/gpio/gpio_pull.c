@@ -8,9 +8,6 @@ devcall gpio_pull(struct dentry *devptr)
 	gpioptr = &gpiotab[devptr->dvminor];
 
 	wait(gpioptr->sem);
-
-
-	wait(gpioptr->sem);
 	ch = *gpioptr->gpiohead++;
 
 	if (gpioptr->gpiohead >= &gpioptr->gpiobuf[GPIO_BUFLEN]) 

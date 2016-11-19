@@ -67,14 +67,15 @@ devcall	gpioinit(
 	if(devptr->dvminor == 0) {
 		gpioptr->port = 8;
 		gpioptr->pin = 12;
+		gpioptr->sem = semcreate(GPIO_BUFLEN);
 	} else {
 		gpioptr->port = 8;
 		gpioptr->pin = 11;
 		gpioptr->int_mode = 1;
+		gpioptr->sem = semcreate(0);
 	}
 	gpioptr->gpiohead = gpioptr->gpiotail = &gpioptr->gpiobuf[0];	
 	*gpioptr->gpiohead = 1;
-	gpioptr->sem = semcreate(0);		/* Input semaphore	*/
 	if (gpioptr->int_mode ) {
 		set_evec( devptr->dvirq, (uint32)devptr->dvintr );
 		gpioint_en(gpioptr,gptr);
@@ -82,7 +83,8 @@ devcall	gpioinit(
 
 
 	if(devptr->dvminor == 0) {
-		gpiohandle_out(gpioptr,gptr); //for testing
+	//	gpiohandle_out(gpioptr,gptr); //for testing
+		//gpiopush(devptr,(char)0x1);
 	} 
 	return OK;
 }

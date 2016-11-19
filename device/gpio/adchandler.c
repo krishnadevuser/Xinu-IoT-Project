@@ -15,7 +15,7 @@ void adchandler(uint32 xnum) {
 	int i ;
 	unsigned int buf_data = 0;
 
-
+	kprintf("ADC Handler  called  \n" );
 	devptr = (struct dentry *) &devtab[CONSOLE];
 	csrptr = (struct adc_csreg *) devptr->dvcsr;
 
@@ -44,6 +44,7 @@ void adchandler(uint32 xnum) {
 
 			for(i = 0 ; i < csrptr->fifo_cnt ; i++) {
 				buf_data = csrptr->fifo_0_data;
+				kprintf("ADC Handler  called  data = %u \n",buf_data );
 				chn_ID = (buf_data >> 16) & 0xF;
 
 				if(adcptr->adctail == adcptr->adctail && semcount(adcptr->sem) <=ADC_BUFLEN ) {

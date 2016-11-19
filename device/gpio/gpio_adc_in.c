@@ -27,7 +27,7 @@ void gpio_adc_in(
 			for(i = 0 ; i < csrptr->fifo_cnt ; i++) {
 				buf_data = csrptr->fifo_0_data;
 				chn_ID = (buf_data >> 16) & 0xF;
-
+				kprintf("ADC Handler  called  data = %u \n",buf_data );
 				if(adcptr->adctail == adcptr->adctail && semcount(adcptr->sem) <=ADC_BUFLEN ) {
 					*adcptr->adctail++ = buf_data & 0xFFF;
 					if (adcptr->adctail>=&adcptr->adcbuf[ADC_BUFLEN]) {

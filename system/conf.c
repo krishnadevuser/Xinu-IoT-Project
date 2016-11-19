@@ -205,14 +205,14 @@ struct	dentry	devtab[NDEVS] =
 	{ 26, 0, "LED",
 	  (void *)gpioinit, (void *)ionull, (void *)ionull,
 	  (void *)ionull, (void *)ionull, (void *)ionull,
-	  (void *)ionull, (void *)ionull, (void *)ionull,
+	  (void *)gpio_pull, (void *)gpiopush, (void *)ionull,
 	  (void *)0x4804c000, (void *)gpiohandler, 98 },
 
 /* INPUT is gpio */
 	{ 27, 1, "INPUT",
 	  (void *)gpioinit, (void *)ionull, (void *)ionull,
 	  (void *)ionull, (void *)ionull, (void *)ionull,
-	  (void *)ionull, (void *)ionull, (void *)ionull,
+	  (void *)gpio_pull, (void *)gpiopush, (void *)ionull,
 	  (void *)0x4804c000, (void *)gpiohandler, 98 },
 
 /* TEMP is adc */

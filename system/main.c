@@ -45,8 +45,12 @@ process	main(void)
 	char value = gpiohandle_in(gptr,(struct gpio_csreg *) 0x4804C000);
 	kprintf("value = %u",value);*/
 	/////////////////////////////////////////////////////////////////////
-	
-	while(1);
+	putc(LED,1);
+	while(1){
+		char value = getc(INPUT);
+			kprintf("value = %u\n", value);
+		
+	}
 
 	/* Create the shared circular buffer and semaphores here */
 	/* */
