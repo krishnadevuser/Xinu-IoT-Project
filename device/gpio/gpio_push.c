@@ -1,4 +1,4 @@
-#include<xinu.h>
+#include <xinu.h>
 
 devcall gpiopush(struct dentry *devptr, char ch)
 {
@@ -11,9 +11,9 @@ devcall gpiopush(struct dentry *devptr, char ch)
 
 	if(gpioptr->gpiotail >= gpioptr->gpiobuf[GPIO_BUFLEN])
 	{
-		gpio->gpiotail = gpiobuf;
+		gpioptr->gpiotail = gpioptr->gpiobuf;
 	}
-
-	gpioickout((struct gpio_csreg *)devptr->devcsr);
+	gpiohandle_out(gpioptr,(struct gpio_csreg *)devptr->dvcsr); //for testing
+	//gpioickout((struct gpio_csreg *)devptr->devcsr);
 	return OK;
 }

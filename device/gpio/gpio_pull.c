@@ -1,11 +1,14 @@
-#include<xinu.h>
+#include <xinu.h>
 
 devcall gpio_pull(struct dentry *devptr)
 {
 	char ch;
-	struct gpioblk *gpioptr;
+	struct gpiocblk *gpioptr;
 
 	gpioptr = &gpiotab[devptr->dvminor];
+
+	wait(gpioptr->sem);
+
 
 	wait(gpioptr->sem);
 	ch = *gpioptr->gpiohead++;
