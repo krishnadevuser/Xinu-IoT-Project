@@ -5,42 +5,43 @@
  *------------------------------------------------------------------------
  */
 void adchandler(uint32 xnum) {
-	struct	dentry	*devptr;	/* Address of device control blk*/
-	struct	adccblk	*adcptr;		/* Pointer to ttytab entry	*/	
-	struct	adc_csreg *csrptr;	/* Address of UART's CSR	*/
-	uint32	iir = 0;		/* Interrupt identification	*/
-	uint32	lsr = 0;		/* Line status			*/
+	struct	dentry	*devptr;	
+	struct	adccblk	*adcptr;		
+	struct	adc_csreg *csrptr;	
+	uint32	iir = 0;		
+	uint32	lsr = 0;		
 	int chn_ID =0;
-	int32	avail;			/* Chars available in buffer	*/
+	int32	avail;			
 	int i ;
 	unsigned int buf_data = 0;
 
 	kprintf("ADC Handler  called  \n" );
+	return ;
 	devptr = (struct dentry *) &devtab[CONSOLE];
 	csrptr = (struct adc_csreg *) devptr->dvcsr;
 
 
-	/* Get CSR address of the device (assume console for now) */
+	
 	iir = csrptr->irq_s;
 
-	if (iir & ADC_IIR_IRQ == 0) {
+	/*if (iir & ADC_IIR_IRQ == 0) {
 		return;
     }
-	//iir &= ADC_IIR_IDMASK;		/* Mask off the interrupt ID */ADC_IIR_IDMASK 
+	//iir &= ADC_IIR_IDMASK;		
 
 	avail = semcount(adcptr->sem);
-	if (avail < 0) {		/* One or more processes waiting*/
+	if (avail < 0) {		
 		avail = 0;
 	}
-	if (avail >= ADC_BUFLEN) { /* No space => ignore input	*/
+	if (avail >= ADC_BUFLEN) { 
 		return;
 	}
 
-	/* Obtain a pointer to the tty control block */
+	
 
 	adcptr = &adctab[ devptr->dvminor ];
 		if(csrptr->fifo_cnt  > 0) {
-			/* fetch data from FIFO */
+		
 
 			for(i = 0 ; i < csrptr->fifo_cnt ; i++) {
 				buf_data = csrptr->fifo_0_data;
@@ -58,7 +59,7 @@ void adchandler(uint32 xnum) {
 					//adc_channel_status(	&csrptr->st_en, adcptr->chn_ID , 0); //disable channel
 				}
 			}
-		}
+		}*/
 
 	
 }

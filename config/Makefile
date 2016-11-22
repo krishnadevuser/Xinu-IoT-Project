@@ -3,10 +3,11 @@
 #
 
 COMPILER_ROOT	=	/usr/bin/
-
+GSL_ROOT = /usr/local/bin/
 CC	= ${COMPILER_ROOT}gcc
 LEX	= ${COMPILER_ROOT}flex
 YACC	= ${COMPILER_ROOT}bison -y	# Flag enables yacc-compatible filenames
+GSL	= ${GSL_ROOT}gsl -script:
 CFLAGS	= 
 LFLAGS	= -ll
 
@@ -16,7 +17,7 @@ LFLAGS	= -ll
 
 CONFIG	= config
 
-all:		conf.h conf.c
+all:		conf.h conf.c gpioinit.c
 
 ${CONFIG}:	lex.yy.c y.tab.c
 		$(CC) ${CFLAGS} -o $@ y.tab.c ${LFLAGS}
@@ -27,8 +28,11 @@ lex.yy.c:	config.l
 y.tab.c:	config.y
 		$(YACC) config.y
 
+gpioinit.c:	device.xml
+		$(GSL)device.gsl device.xml
+
 clean:
-		rm -f config lex.yy.c y.tab.c
+		rm -f config lex.yy.c y.tab.c gpioinit.c
 
 conf.h:		config Configuration
 		./config Configuration conf.c conf.h
@@ -36,6 +40,7 @@ conf.h:		config Configuration
 conf.c:		config Configuration
 		./config Configuration conf.c conf.h
 
-install:	conf.h conf.c
+install:	conf.h conf.c gpioinit.c
 		cp -p conf.h ../include
 		cp -p conf.c ../system
+		cp -p gpioinit.c ../device/gpio

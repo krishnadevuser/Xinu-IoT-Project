@@ -46,10 +46,12 @@ process	main(void)
 	kprintf("value = %u",value);*/
 	/////////////////////////////////////////////////////////////////////
 	putc(LED,1);
+
+	//getc(TEMP);
 	while(1){
 		char value = getc(INPUT);
 			kprintf("value = %u\n", value);
-		
+		//kprintf("data value = %f",((float)analogRead() / 4095.0f) * 1.8f);
 	}
 
 	/* Create the shared circular buffer and semaphores here */

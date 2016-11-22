@@ -32,6 +32,14 @@ tty:
 		-w ttywrite     -s ioerr        -n ttycontrol
 		-intr ttyhandler
 
+adc:
+	on an1
+		-i adcinit	-o ionull	-c ionull
+		-r ionull	-g adcpoll	-p ionull
+		-w ionull	-s ionull	-n ionull
+		-intr adchandler
+
+
 /* type of a ethernet device */
 eth:
 	on am335x_eth
@@ -108,13 +116,6 @@ gpio:
 		-r ionull	-g gpio_pull	-p gpiopush
 		-w ionull	-s ionull	-n ionull
 		-intr gpiohandler
-
-adc:
-	on an1
-		-i adcinit	-o ionull	-c ionull
-		-r ionull	-g ionull	-p ionull
-		-w ionull	-s ionull	-n ionull
-		-intr adchandler
 %%
 
 /* Actual device declarations that each give the name of a device that	*/
@@ -122,6 +123,8 @@ adc:
 
    /* Define the console device to be a tty and specify CSR*/
    CONSOLE is tty  on uart  csr 0x44E09000 -irq 72
+
+   TEMP is adc  on an1  csr 0x44E0D000 -irq 16
 
    /* Define a null device */
    NULLDEV is null on nothing
@@ -175,7 +178,7 @@ adc:
 
    LED is gpio on gpio1 csr 0x4804C000 -irq 98
    INPUT is gpio on gpio1 csr 0x4804C000 -irq 98
-   TEMP is adc  on an1  csr 0x44E0D000 -irq 16
+   
 
 %%
 
