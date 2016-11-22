@@ -559,9 +559,19 @@ extern	devcall	ttywrite(struct dentry *, char *, int32);
 
 /* in gpiohandler_out.c*/
 extern void		gpiohandle_out(struct gpiocblk *gpioptr,struct gpio_csreg *csrptr);
-extern void		gpioinit( void);
+extern devcall	gpioinit(struct dentry	*devptr);
+extern devcall	diginit(struct dentry	*devptr	);
 extern void	gpiokickout(struct gpio_csreg *csrptr);
-extern int adc_channel_status(volatile uint32	*st_en, int chn_ID , int enable);
+int adc_channel_status(struct	adc_csreg *aptr, int chn_ID , int enable);
+extern char gpiohandler(uint32 xnum);
+extern devcall	adcinit( struct dentry	*devptr	);
+extern void adchandler(uint32 xnum);
+extern devcall gpiopush(struct dentry *devptr, bool8 ch);
+extern devcall gpio_pull(struct dentry *devptr);
+extern devcall adcpoll(struct dentry *devptr);
+extern int analogRead();
+
+extern void ADCTSC_module_ctrl( struct	adccblk	*adcptr, struct	adc_csreg *aptr);
 
 /* in file udp.c */
 

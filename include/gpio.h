@@ -21,7 +21,7 @@ struct	gpiocblk	{			/* Tty line control block	*/
 	char	gpiobuf[GPIO_BUFLEN];	/* Input buffer (holds one line)*/
 	sid32	sem;			/* Input semaphore */
 	bool8 	int_mode;
-	
+	bool8 	mode;
 	
 };
 

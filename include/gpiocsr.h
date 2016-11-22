@@ -15,9 +15,9 @@ struct	gpio_csreg
 	volatile uint32 irq_s_set_1;  /*GPIO_IRQSTATUS_SET_1 */
 	volatile uint32 irq_s_clr_0;/* GPIO_IRQSTATUS_CLR_0		*/
 	volatile uint32 irq_s_clr_1;	/* GPIO_IRQSTATUS_CLR_1	*/
-	volatile uint32 irq_waken_0;	/* GPIO_IRQWAKEN_0	*/
-	volatile uint32 irq_waken_1;   /* GPIO_IRQWAKEN_1	*/
-	volatile uint32 gap[51];
+	//volatile uint32 irq_waken_0;	/* GPIO_IRQWAKEN_0	*/
+	//volatile uint32 irq_waken_1;   /* GPIO_IRQWAKEN_1	*/
+	volatile uint32 gap[53];
 	volatile uint32 sys_stat[6];  /* GPIO_SYSSTATUS */
 	volatile uint32 crtl;
 	volatile uint32 oe;

@@ -17,7 +17,7 @@ struct	adc_csreg
 	volatile uint32 range;   /* GPIO_IRQWAKEN_1	*/
 	volatile uint32 clkdiv; /* ADC_CLKDIV */
 	volatile uint32 misc;  /* ADC_MISC */
-	volatile uint32 crtl;
+	//volatile uint32 crtl;
 	volatile uint32 st_en;
 	volatile uint32 idle_cnf;
 	volatile uint32 ts_chg_stcnf;
@@ -64,7 +64,9 @@ struct	adc_csreg
 	volatile uint32 fifo_1_data[64];
 };
 
-
+/* CTRL operator code */
+#define CTRL_ENABLE	0x1
+#define CTRL_STEP_ID_TAG	0x2
 
 #define ADC_IIR_IRQ	0x01	/* Interrupt pending bit		*/
 #define ADC_READY	0x02	/* Interrupt pending bit		*/
