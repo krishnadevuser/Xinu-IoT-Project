@@ -35,7 +35,7 @@ tty:
 adc:
 	on an1
 		-i adcinit	-o ionull	-c ionull
-		-r ionull	-g adcpoll	-p ionull
+		-r adcread	-g ionull	-p ionull
 		-w ionull	-s ionull	-n ionull
 		-intr adchandler
 

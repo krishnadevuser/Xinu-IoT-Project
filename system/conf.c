@@ -29,8 +29,8 @@ struct	dentry	devtab[NDEVS] =
 /* TEMP is adc */
 	{ 1, 0, "TEMP",
 	  (void *)adcinit, (void *)ionull, (void *)ionull,
+	  (void *)adcread, (void *)ionull, (void *)ionull,
 	  (void *)ionull, (void *)ionull, (void *)ionull,
-	  (void *)adcpoll, (void *)ionull, (void *)ionull,
 	  (void *)0x44e0d000, (void *)adchandler, 16 },
 
 /* NULLDEV is null */
