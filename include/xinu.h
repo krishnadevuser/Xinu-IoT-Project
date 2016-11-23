@@ -8,13 +8,13 @@
 #include <semaphore.h>
 #include <memory.h>
 #include <bufpool.h>
-#include <test.h>
+//#include <test.h>
 #include <clock.h>
 #include <mark.h>
 #include <ports.h>
 #include <uart.h>
 #include <tty.h>
-//#include <adc.h>
+#include <adc.h>
 #include <gpio.h>
 #include <gpiocsr.h>
 #include <device.h>

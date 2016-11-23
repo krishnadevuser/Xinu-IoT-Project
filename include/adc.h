@@ -139,32 +139,9 @@ void adchandler(uint32 xnum);
 #define ADC_END_OF_SEQUENCE_INTR				(0x01<<1)	//end of sequence interrupt
 
 
-void ADCStepModeConfig(struct adc_csreg *pReg, unsigned int stepSelect,unsigned int mode);
-void ADCStepFIFOSelConfig(struct adc_csreg *pReg, unsigned int stepSelect,unsigned int fifoNO);
-void ADCStepAnalogGroundConfig(struct adc_csreg *pReg, unsigned int stepSelect,
-								 unsigned int xnnsw,unsigned int ypnsw, unsigned int ynnsw,
-                                 unsigned int wpnsw);
-void ADCStepAnalogSupplyConfig(struct adc_csreg *pReg, unsigned int stepSelect,
-									unsigned int xppsw, unsigned int xnpsw, unsigned int yppsw);
-void ADCStepConfig(struct adc_csreg *pReg, unsigned int stepSelect, 
-					unsigned int positiveChannel,unsigned int positiveRef,
-					unsigned int negativeChannel,unsigned int negativeRef);
-void ADCStepOperationModeControl(struct adc_csreg *pReg, unsigned int stepSelect, unsigned int mode);
-void StepConfig(struct adc_csreg *pReg);
-void ADCConfigure(struct adc_csreg *pReg);
-void ADCEnableModual(struct adc_csreg *pReg);
-void ADCDisableModual(struct adc_csreg *pReg);
-void ADCClearInterruptStatus(struct adc_csreg *pReg);
-void ADCClearInterruptStatus(struct adc_csreg *pReg);
-void ADCStepEnable(struct adc_csreg *pReg, unsigned int selectStep);
-void ADCWorkModeConfigue(struct adc_csreg *pReg,unsigned int workMode);
-void ADCStepConfigWriteProtect(struct adc_csreg *pReg, unsigned int isWritable);
-void ADCTSTransistorConfig(struct adc_csreg *pReg);
-void ADCConfigureAFEClock(struct adc_csreg *pReg, unsigned int freq);
-void ADCSetInterruptBit(struct adc_csreg *pReg, unsigned int irqEnable);
-void InitialADCInterrupt(struct	dentry *devptr);
 
-void InitialL4Clock();
-void InitializeADCClock();
+
+void adc_step_enable(struct adc_csreg *aReg, unsigned int selStep);
+void adc_step_disable(struct adc_csreg *aReg, unsigned int selStep);
 
 #endif

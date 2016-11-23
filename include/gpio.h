@@ -38,6 +38,8 @@ struct	adccblk	{			/* Tty line control block	*/
 	char work_mode;
 	int H_range;
 	int L_range;
+	int freq;
+	int sample_rate;
 	int sample_avg;
 	int sample_dly;
 	int open_dly;

@@ -20,7 +20,7 @@ devcall	adcread(struct dentry* devptr,char* buff, int32 count)
 	//I use ADC with continuous mode, and in the interrupt handler, the step module
 	//will be disable.Thus everytime when user want to read the ADC, this function will
 	//enable the step module.
-	ADCStepEnable(pReg,1);
+	adc_step_enable(pReg,1);
 
 	//wait for semaphore signaled by interrupt handler.
 	wait(readSem);

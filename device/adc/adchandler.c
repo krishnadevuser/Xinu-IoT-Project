@@ -2,14 +2,7 @@
 
 extern sid32 readSem;
 
-/**************************************************************************
-function name:  adchandler
-description:    ADC Interrupt handler. Just clear the interrupt status, and 
-                then signal the semaphore to notify waiting read function.
-input:          xnum-------->IRQ number
-date:           11/11/2016
-author:         Kai Zhang				 
-**************************************************************************/
+
 void adchandler(uint32 xnum)
 {
 	struct	dentry	*devptr;            // Address of device control blk	
@@ -22,7 +15,7 @@ void adchandler(uint32 xnum)
 	irqStatus = csrptr->irqStatus;      // read interrupt status
 	csrptr->irqStatus = irqStatus;      // clear interrupt by write back
 
-	ADCStepDisable(csrptr, 0);
+	adc_step_disable(csrptr, 0);
 	semcount(readSem);                  //Add semaphore
 	signal(readSem);                    //signal and notify read function	
 	return;
