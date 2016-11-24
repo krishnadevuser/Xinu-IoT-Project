@@ -114,10 +114,6 @@ devcall	adcinit (struct	dentry *devptr)
  	adcptr = &adctab[ devptr->dvminor ];
  	//adcptr->sem = semcreate(0);	 // remove
  	//Setup clk divison for ADC
- 	dcptr->chn_ID  = 0;
-	adcptr->clkdiv = 1 ;
-	adcptr->sample_rate = 16;
-	adcptr->freq = 3000000;
 
  	InitialL4Clock();
 

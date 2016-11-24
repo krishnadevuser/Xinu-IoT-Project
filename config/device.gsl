@@ -61,7 +61,10 @@ devcall	gpioinit(
 	gpioptr = &gpiotab[ devptr->dvminor ];
 	gptr = (struct gpio_csreg *)devptr->dvcsr;
 	switch(devptr->dvminor){
+.for devices
+//BBB $(name)
 .for device
+. if type = "gpio"
 	case $(index):
 .for port
 			gpioptr->port = $(name);
@@ -84,6 +87,8 @@ devcall	gpioinit(
 .endfor
 .endfor
 	break;
+.endif
+.endfor
 .endfor
 		default:
 			return SYSERR;

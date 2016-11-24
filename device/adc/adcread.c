@@ -1,7 +1,7 @@
 #include <xinu.h>
 
 
-extern sid32 readSem;
+//extern sid32 readSem;
 
 /**************************************************************************
 function name:  adcread
@@ -16,6 +16,8 @@ devcall	adcread(struct dentry* devptr,char* buff, int32 count)
 {
 	//kprintf("--------------ADC Read-------------\r\n");
 	struct adc_csreg* pReg = (struct adc_csreg*)devptr->dvcsr;
+	struct	adccblk	*adcptr;
+ 	adcptr = &adctab[ devptr->dvminor ];
 
 	//I use ADC with continuous mode, and in the interrupt handler, the step module
 	//will be disable.Thus everytime when user want to read the ADC, this function will
@@ -23,7 +25,7 @@ devcall	adcread(struct dentry* devptr,char* buff, int32 count)
 	adc_step_enable(pReg,1);
 
 	//wait for semaphore signaled by interrupt handler.
-	wait(readSem);
+	wait(adcptr->sem);
 
 	unsigned int data = 0;
 	// float temperature;
