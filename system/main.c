@@ -13,7 +13,7 @@
 #define DIG_INPUT 0
 
 #define PORT 2222
-#define BBID 2
+#define BBID 1
 #define DIG_INPUT 0
 
 pid32 server_id, client_id;

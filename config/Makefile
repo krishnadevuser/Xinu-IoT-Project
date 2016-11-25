@@ -29,7 +29,7 @@ y.tab.c:	config.y
 		$(YACC) config.y
 
 gpioinit.c:	device.xml
-		$(GSL)device.gsl device.xml
+		$(GSL)gpio.gsl device.xml
 
 main.c:	device.xml
 		$(GSL)main.gsl device.xml

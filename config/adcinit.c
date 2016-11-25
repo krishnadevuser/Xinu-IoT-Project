@@ -123,14 +123,7 @@ devcall	adcinit (struct	dentry *devptr)
 	&adcptr->adcbuf[0];		/*    as empty		*/
 	adcptr->sem = semcreate(0);		/* Input semaphore	*/
 
-//BBB bbb2
-// port =9;
-	adcptr->chn_ID  = 0;
-//mode in
-//interrupt yes
-	adcptr->clkdiv = 1 ;
-	adcptr->sample_rate = 16;
-	adcptr->freq = 3000000;
+//BBB bbb1
 	adcptr->open_dly = 0;
 	adcptr->sample_dly = 1;
  	unsigned int clkDiv = 24000000/adcptr->freq - 1;  ///3 MHZ frequency
