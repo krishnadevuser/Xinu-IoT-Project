@@ -60,7 +60,7 @@ devcall	gpioinit(
 	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
 	gpioptr = &gpiotab[ devptr->dvminor ];
 	gptr = (struct gpio_csreg *)devptr->dvcsr;
-	switch(devptr->dvminor){
+	switch(devptr->dvnum){
 .for devices
 //BBB $(name)
 .for device

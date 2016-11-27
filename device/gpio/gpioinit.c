@@ -59,7 +59,7 @@ devcall	gpioinit(
 	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
 	gpioptr = &gpiotab[ devptr->dvminor ];
 	gptr = (struct gpio_csreg *)devptr->dvcsr;
-	switch(devptr->dvminor){
+	switch(devptr->dvnum){
 //BBB bbb1
 	case 27:
 			gpioptr->port = 8;
@@ -73,8 +73,6 @@ devcall	gpioinit(
 			gpioptr->mode = 0;
 			gpioptr->int_mode = 1;
 	break;
-		default:
-			return SYSERR;
 	}
 	gpioptr->gpiohead = gpioptr->gpiotail = &gpioptr->gpiobuf[0];	
 	*gpioptr->gpiohead = 1;
@@ -85,11 +83,12 @@ devcall	gpioinit(
 	} else {
 		gptr->oe |= (PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]);
 		gpioptr->sem = semcreate(0);
+		if (gpioptr->int_mode ) {
+			set_evec( devptr->dvirq, (uint32)devptr->dvintr );
+			gpioint_en(gpioptr,gptr);
+		}
 	}
-	if (gpioptr->int_mode ) {
-		set_evec( devptr->dvirq, (uint32)devptr->dvintr );
-		gpioint_en(gpioptr,gptr);
-	}
+	
 
 	return OK;
 }

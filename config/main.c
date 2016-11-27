@@ -7,11 +7,6 @@
 #define TEMP_BUF_LEN 4
 #define BBB_INIT 200
 
-
-#define PORT 4444
-#define BBID 0
-#define DIG_INPUT 0
-
 #define PORT 2222
 #define BBID 1
 #define DIG_INPUT 0

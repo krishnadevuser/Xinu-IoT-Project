@@ -8,11 +8,6 @@
 #define TEMP_BUF_LEN 4
 #define BBB_INIT 200
 
-
-#define PORT 4444
-#define BBID 0
-#define DIG_INPUT 0
-
 .for devices
 #define PORT $(port)
 #define BBID $(id)
@@ -225,7 +220,9 @@ process	main(void)
  
 	recvclr();
     kprintf("System Starts\\n");
+    putc(LED,1);
     BB_init();
+    putc(LED,0);
     server_id = create(udpserver, 4096, 50, "udpserver",0);
     resume(server_id);
     client_id = create(udpclient, 4096, 50, "udpclient",0);

@@ -7,19 +7,19 @@
 {
 	struct	dentry	*devptr;	
 
-	devptr = (struct dentry *) &devtab[27];
+	devptr = (struct dentry *) &devtab[INPUT];
 	struct gpio_csreg * csrptr = (struct uart_csreg *) devptr->dvcsr;
 	struct gpiocblk* gpioptr = &gpiotab[ devptr->dvminor ];
-
+	//kprintf("Interrupt called \n" );
 	if ((csrptr->data_in & PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]))
 	{
 		*gpioptr->gpiotail = 1;
 		*gpioptr->gpiotail++;
-		//kprintf("Interrupt called value 1 \n" );
+		kprintf("Interrupt called value 1 \n" );
 	}
 	else
 	{
-		//kprintf("Interrupt called value 0 \n" );
+		kprintf("Interrupt called value 0 \n" );
 		*gpioptr->gpiotail = 0;
 		*gpioptr->gpiotail++;
 	}
