@@ -1,3 +1,4 @@
+.output "main.c"
 #include <xinu.h>
 #include <stdio.h>
 #include <string.h>
@@ -7,9 +8,11 @@
 #define TEMP_BUF_LEN 4
 #define BBB_INIT 200
 
-#define PORT 2222
-#define BBID 1
-#define DIG_INPUT 0
+.for devices
+#define PORT $(port)
+#define BBID $(id)
+#define DIG_INPUT $(dig_in)
+.endfor
 
 pid32 server_id, client_id;
 
@@ -17,7 +20,6 @@ uint32  remip;          /* remote sender's IP address   */
 uint16  remport;        /* remote sender's UDP port */
 int32   slot;
 uint32 localip;
-
 
 /* UDP message struture*/
 struct msg_struct{
@@ -42,7 +44,6 @@ void cleardata(struct msg_struct *msg){
 
 }
 
-
 /**************************************************************************
 function name:  gettemp
 description:    get the temperature from the adc 
@@ -65,7 +66,6 @@ uint32 gettemp(){
 }
 
 
-
 /**************************************************************************
 function name:  BB_init
 description:    When Xinu boots first main will Initialize the UDP connection with the Edge server.The main process will wait 
@@ -81,52 +81,46 @@ author:         Madhav Agrawal
 void BB_init(){
     struct msg_struct msg;
     int32   retval;
-    kprintf("BB_init...... \n");
+    kprintf("BB_init...... \\n");
     localip = getlocalip();
 
-    kprintf("My ip address is %d \n",localip);
+    kprintf("My ip address is %d \\n",localip);
     while (localip == SYSERR) {
-        kprintf("%s: could not obtain a local IP address retry....\n");
+        kprintf("%s: could not obtain a local IP address retry....\\n");
         localip = getlocalip();
-        kprintf("My ip address is %d \n",localip);
+        kprintf("My ip address is %d \\n",localip);
     }
 
     /* register local UDP port */
 
     slot = udp_register(0, 0, PORT);
     while (slot == SYSERR) {
-        kprintf("%s: slot register....\n");
+        kprintf("%s: slot register....\\n");
         slot = udp_register(0, 0, PORT);
     }
-    
 
-    kprintf("initize BBB.........\n");
+    kprintf("initize BBB.........\\n");
     while(TRUE) {
-        cleardata(&msg);
-
         retval = udp_recvaddr(slot, &remip, &remport,(char*)&msg,sizeof(struct msg_struct ), 200000);
         if (retval == TIMEOUT) {
             continue;
         } else if (retval == SYSERR) {
-            kprintf(": error receiving UDP\n");
+            kprintf(": error receiving UDP\\n");
             //return 1;
         }
-        msg = (struct msg_struct) msg;
-        kprintf("Messge Received msg.bb_id = %u ,msg.msg_id = %u ,msg.dev_id = %u,msg.status = %u\n",msg.bb_id,msg.msg_id,msg.dev_id,msg.status);
         if (msg.bb_id == BBID && msg.status == BBB_INIT){
 
             retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
             if (retval == SYSERR) {
-                fprintf(stderr, ": udp_sendto failed\n");
+                fprintf(stderr, ": udp_sendto failed\\n");
             }
             break;
         }
     }
 
-    kprintf("BBB INITIALIZE complete\n");
+    kprintf("BBB INITIALIZE complete\\n");
 
 }
-
 
 /**************************************************************************
 function name:  udpclient process
@@ -149,11 +143,11 @@ author:         Madhav Agrawal
      kprintf("udp client starts ");
      localip = getlocalip();
 
-    kprintf("My ip address is %d \n",localip);
+    kprintf("My ip address is %d \\n",localip);
     while (localip == SYSERR) {
-        kprintf("%s: could not obtain a local IP address retry....\n");
+        kprintf("%s: could not obtain a local IP address retry....\\n");
         localip = getlocalip();
-        kprintf("My ip address is %d \n",localip);
+        kprintf("My ip address is %d \\n",localip);
     }
 
     while (TRUE) {
@@ -165,7 +159,7 @@ author:         Madhav Agrawal
         msg.msg_id++;
         retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
         if (retval == SYSERR) {
-            fprintf(stderr, ": udp_sendto failed\n");
+            fprintf(stderr, ": udp_sendto failed\\n");
         }
 
     } else {
@@ -175,7 +169,7 @@ author:         Madhav Agrawal
         msg.msg_id++;
         retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
         if (retval == SYSERR) {
-            fprintf(stderr, ": udp_sendto failed\n");
+            fprintf(stderr, ": udp_sendto failed\\n");
         }
 
     }
@@ -185,7 +179,6 @@ author:         Madhav Agrawal
 
      return 0;
  }
-
 
 
 /**************************************************************************
@@ -205,70 +198,65 @@ process udpserver() {
    // uint32  localip;        /* local IP address     */
     int32   msglen;         /* length of outgoing message   */
 
-    while (1) {
-        kprintf("waiting for recv.........\n");
+    while (TRUE) {
+        kprintf("waiting for recv.........\\n");
         retval = udp_recvaddr(slot, &remip, &remport,(char*)&msg,sizeof(struct msg_struct ), 200000);
        if (retval == TIMEOUT) {
             continue;
         } else if (retval == SYSERR) {
-            kprintf(": error receiving UDP\n");
+            kprintf(": error receiving UDP\\n");
             //return 1;
         }
 
         if (msg.bb_id == BBID){
-            kprintf( ": echo message\n");
+            kprintf( ": echo message\\n");
             retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
             if (retval == SYSERR) {
-                fprintf(stderr, ": udp_sendto failed\n");
+                fprintf(stderr, ": udp_sendto failed\\n");
             }
             msg = (struct msg_struct) msg;
 
             switch(msg.dev_id){
                 case LED:
-                {
-                    kprintf( ": TEMP LED = %u\n",msg.status);
                     if (msg.status >0){
                         putc(LED,1);
                     } else {
                         putc(LED,0);
                     }
-                    break;
-                }
+                break;
+
+
                 case TEMP:
-                    {
-                        kprintf( ": TEMP reading....\n");
-                        msg.dev_id = TEMP;
-                        msg.bb_id = BBID;
-                        msg.status = gettemp();
-                        msg.msg_id++;
-                        retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
-                        if (retval == SYSERR) {
-                            fprintf(stderr, ": udp_sendto failed\n");
-                        }
-                        break;
+                    msg.dev_id = TEMP;
+                    msg.bb_id = BBID;
+                    msg.status = gettemp();
+                    msg.msg_id++;
+                    retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
+                    if (retval == SYSERR) {
+                        fprintf(stderr, ": udp_sendto failed\\n");
                     }
+                 break;
                 case INPUT:
-                    {
-                    kprintf( ": INPUT READING....\n");
                     msg.dev_id = INPUT;
                     msg.bb_id = BBID;
                     msg.status = getc(INPUT);
                     msg.msg_id++;
                     retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
                     if (retval == SYSERR) {
-                        fprintf(stderr, ": udp_sendto failed\n");
+                        fprintf(stderr, ": udp_sendto failed\\n");
                     }
-                    break;
-                }
+
+
+
+                break;
+
 
             }
         }
-        kprintf( "sending done\n");
         cleardata(&msg);
     }
     return OK;
 }
-
 
 /**************************************************************************
 function name:  main
@@ -280,7 +268,7 @@ process	main(void)
 {
  
 	recvclr();
-    kprintf("System Starts\n");
+    kprintf("System Starts\\n");
     putc(LED,1);
     BB_init();
     putc(LED,0);
@@ -290,5 +278,4 @@ process	main(void)
     resume(client_id);
 	return OK;
 }
-
 

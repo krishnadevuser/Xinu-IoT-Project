@@ -17,7 +17,7 @@ LFLAGS	= -ll
 
 CONFIG	= config
 
-all:		conf.h conf.c gpioinit.c
+all:		conf.h conf.c gpioinit.c main.c adcinit.c
 
 ${CONFIG}:	lex.yy.c y.tab.c
 		$(CC) ${CFLAGS} -o $@ y.tab.c ${LFLAGS}
@@ -29,10 +29,15 @@ y.tab.c:	config.y
 		$(YACC) config.y
 
 gpioinit.c:	device.xml
-		$(GSL)device.gsl device.xml
+		$(GSL)gpio.gsl device.xml
 
+main.c:	device.xml
+		$(GSL)main.gsl device.xml
+
+adcinit.c:device.xml
+		$(GSL)adc.gsl device.xml
 clean:
-		rm -f config lex.yy.c y.tab.c gpioinit.c
+		rm -f config lex.yy.c y.tab.c gpioinit.c main.c adcinit.c
 
 conf.h:		config Configuration
 		./config Configuration conf.c conf.h
@@ -40,7 +45,9 @@ conf.h:		config Configuration
 conf.c:		config Configuration
 		./config Configuration conf.c conf.h
 
-install:	conf.h conf.c gpioinit.c
+install:	conf.h conf.c gpioinit.c adcinit.c
 		cp -p conf.h ../include
 		cp -p conf.c ../system
 		cp -p gpioinit.c ../device/gpio
+		cp -p adcinit.c ../device/adc
+		cp -p main.c ../system

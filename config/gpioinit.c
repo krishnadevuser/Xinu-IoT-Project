@@ -60,13 +60,14 @@ devcall	gpioinit(
 	gpioptr = &gpiotab[ devptr->dvminor ];
 	gptr = (struct gpio_csreg *)devptr->dvcsr;
 	switch(devptr->dvminor){
-	case 0:
+//BBB bbb1
+	case 27:
 			gpioptr->port = 8;
 			gpioptr->pin  = 12;
 			gpioptr->mode = 1;
 			gpioptr->int_mode = 0;
 	break;
-	case 1:
+	case 28:
 			gpioptr->port = 8;
 			gpioptr->pin  = 11;
 			gpioptr->mode = 0;

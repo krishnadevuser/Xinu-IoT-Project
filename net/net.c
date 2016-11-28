@@ -92,6 +92,21 @@ process	netin ()
 		if(retval == SYSERR) {
 			panic("Cannot read from Ethernet\n");
 		}
+	//	kprintf("packet received msg = ");
+		//for (int i =0; i <PACKLEN ; i ++ ){
+		//kprintf("%u",pkt->net_ipsrc);
+		//}
+		//kprintf("end \n");
+
+		//kprintf("udp data = ");
+		//uint32 msglen = pkt->net_udplen - UDP_HDR_LEN;
+		//char* udataptr = (char *)pkt->net_udpdata;
+		/*uint32 i;
+		for (i=0; i<msglen; i++) {
+			kprintf("%c = ",*udataptr);
+			*udataptr++;
+		}
+		kprintf("end \n");*/
 
 		/* Convert Ethernet Type to host order */
 

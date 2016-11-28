@@ -1,21 +1,23 @@
 <?xml version="1.0"?>
-<devices name ="BBB1">
-	<device name="LED" index= "0" >
-	    <port name= "8" >
-	    	<pin name= "12" >
-	    		<mode name= "out">
-	    			<interrupt name="no"/>
-	    		</mode>
-	    	</pin> 
-		</port>
-	</device>
-	<device name="BUTTON" index= "1" > 
-	    <port name= "8" >
-	    	<pin name= "11" >
-	    		<mode name= "in">
-	    			<interrupt name="yes"/>
-	    		</mode>
-	    	</pin> 
-		</port>
-	</device>
-</devices>
+<BBB name="xinu">
+	<devices name ="BBB1" id ="1" port="2222" dig_in = "0">
+		<device name="LED" index= "27" type= "gpio" >
+		    <port name= "8" >
+		    	<pin name= "12" >
+		    		<mode name= "out">
+		    			<interrupt name="no"/>
+		    		</mode>
+		    	</pin> 
+			</port>
+		</device>
+		<device name="BUTTON" index= "28" type= "gpio" > 
+		    <port name= "8" >
+		    	<pin name= "11" >
+		    		<mode name= "in">
+		    			<interrupt name="yes"/>
+		    		</mode>
+		    	</pin> 
+			</port>
+		</device>
+	</devices>
+</BBB>
