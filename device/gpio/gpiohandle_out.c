@@ -1,13 +1,14 @@
-/* ttyhandle_out.c - ttyhandle_out */
+/* gpiohandle_out.c - gpiohandle_out */
 
 #include <xinu.h>
 
-/*------------------------------------------------------------------------
- *  ttyhandle_out  -  Handle an output on a tty device by sending more
- *		     characters to the device FIFO (interrupts disabled)
- *------------------------------------------------------------------------
- */
 
+/**************************************************************************
+function name:  gpiohandle_out
+description:    Handle an output on a GPIO device by sending more characters to the device FIFO (interrupts disabled)
+input:          Pointer to GPIO Structure and Address of GPIO's CSR
+author:         Madhav Agrawal   
+**************************************************************************/
 
 void gpiohandle_out(
 	 struct	gpiocblk	*gpioptr,		/* Ptr to gpiotab entry		*/

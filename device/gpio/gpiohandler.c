@@ -1,7 +1,13 @@
-/* gpiohandle_in.c - gpiohandle_in */
+/* gpiohandler.c - gpiohandler */
 
 #include <xinu.h>
 
+/**************************************************************************
+function name:  gpiohandler
+description:    GPIO handler will be called when a rising or a falling edge is detected
+input:          Pointer to GPIO Structure and Address of GPIO's CSR
+author:         Madhav Agrawal   
+**************************************************************************/
 
  char gpiohandler(uint32 xnum)
 {
