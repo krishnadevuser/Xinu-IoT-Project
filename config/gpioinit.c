@@ -29,6 +29,12 @@ const unsigned int p9_PortIDSet[]={0,	0,	0,	0,	0,	0,	0,	0,
  */
  unsigned int* PortIDSet_ptr[2];
 
+/**************************************************************************
+function name:  gpioinit_en
+description:    To enable/disable to GPIO Interrupt Mode for rising edge and falling edge detection
+input:          Pointer to GPIO Structure and Address of GPIO's CSR
+author:         Madhav Agrawal   
+**************************************************************************/
 
 void gpioint_en (
 	 struct	gpiocblk *gpioptr,	/* Ptr to gpiotab entry		*/
@@ -48,6 +54,12 @@ void gpioint_en (
 	
 }
 
+/**************************************************************************
+function name:  gpioinit
+description:    To initialize the port and pin as output/input as per the DDL file
+input:          Pointer to Device Switch Table entry
+author:         Madhav Agrawal   
+**************************************************************************/
 devcall	gpioinit(
 	  struct dentry	*devptr		/* Entry in device switch table	*/
 	)

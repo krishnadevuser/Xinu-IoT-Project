@@ -2,12 +2,12 @@
 
 #include <xinu.h>
 
-/*------------------------------------------------------------------------
- *  gpiohandle_in  -  Handle an output on a tty device by sending more
- *		     characters to the device FIFO (interrupts disabled)
- *------------------------------------------------------------------------
- */
-
+/**************************************************************************
+function name:  gpiohandle_in
+description:    Handle an output on a tty device by sending more characters to the device FIFO (interrupts disabled)
+input:          Pointer to GPIO Structure and Address of GPIO's CSR
+author:         Madhav Agrawal   
+**************************************************************************/
 
 char gpiohandle_in(
 	 struct	gpiocblk *gpioptr,	/* Ptr to gpiotab entry		*/
