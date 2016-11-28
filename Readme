@@ -66,6 +66,8 @@ read the current status of the Input pin and send the status to the Edge server 
 
 Build Procedure:
 
+Prerequisite: Please install the GSL library for DDL code generation use line for more detail https://github.com/imatix/gsl
+
 Folder: $XinuRoot/config/
 It is the configuration folder which contains driver xml file and gsl file for reading the driver
 configuration from 

@@ -151,7 +151,7 @@ author:         Madhav Agrawal
     }
 
     while (TRUE) {
-
+    sleep(5);
     if (DIG_INPUT) {
         msg.dev_id = INPUT;
         msg.bb_id = BBID;

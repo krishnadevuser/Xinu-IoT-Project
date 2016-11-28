@@ -109,7 +109,6 @@ devcall	adcinit (struct	dentry *devptr)
 
 	//create a semaphore, when interrupt finish reading, it will add sem by one, and read function
 	//will wait this semaphore
-	return OK;
 	unsigned int *reg = NULL;
  	struct	adccblk	*adcptr;
  	adcptr = &adctab[ devptr->dvminor ];

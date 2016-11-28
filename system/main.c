@@ -9,7 +9,7 @@
 
 #define PORT 2222
 #define BBID 1
-#define DIG_INPUT 0
+#define DIG_INPUT 1
 
 pid32 server_id, client_id;
 
@@ -114,7 +114,7 @@ void BB_init(){
         msg = (struct msg_struct) msg;
         kprintf("Messge Received msg.bb_id = %u ,msg.msg_id = %u ,msg.dev_id = %u,msg.status = %u\n",msg.bb_id,msg.msg_id,msg.dev_id,msg.status);
         if (msg.bb_id == BBID && msg.status == BBB_INIT){
-
+            kprintf("remport= %u, remip = %u\n",remport,remip);
             retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
             if (retval == SYSERR) {
                 fprintf(stderr, ": udp_sendto failed\n");
@@ -157,8 +157,9 @@ author:         Madhav Agrawal
     }
 
     while (TRUE) {
-
+    kprintf("udp client while starts ");
     if (DIG_INPUT) {
+        kprintf("Input read ..\n");
         msg.dev_id = INPUT;
         msg.bb_id = BBID;
         msg.status = getc(INPUT);
@@ -169,6 +170,8 @@ author:         Madhav Agrawal
         }
 
     } else {
+        sleep(10);
+        kprintf("Adc read ..\n");
         msg.dev_id = TEMP;
         msg.bb_id = BBID;
         msg.status = gettemp();
@@ -222,24 +225,41 @@ process udpserver() {
                 fprintf(stderr, ": udp_sendto failed\n");
             }
             msg = (struct msg_struct) msg;
+            if (msg.status == BBB_INIT){
+                re
 
-            switch(msg.dev_id){
-                case LED:
-                {
-                    kprintf( ": TEMP LED = %u\n",msg.status);
-                    if (msg.status >0){
-                        putc(LED,1);
-                    } else {
-                        putc(LED,0);
-                    }
-                    break;
-                }
-                case TEMP:
+            } else {
+
+                switch(msg.dev_id){
+                    case LED:
                     {
-                        kprintf( ": TEMP reading....\n");
-                        msg.dev_id = TEMP;
+                        kprintf( ": TEMP LED = %u\n",msg.status);
+                        if (msg.status >0){
+                            putc(LED,1);
+                        } else {
+                            putc(LED,0);
+                        }
+                        break;
+                    }
+                    case TEMP:
+                        {
+                            kprintf( ": TEMP reading....\n");
+                            msg.dev_id = TEMP;
+                            msg.bb_id = BBID;
+                            msg.status = gettemp();
+                            msg.msg_id++;
+                            retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
+                            if (retval == SYSERR) {
+                                fprintf(stderr, ": udp_sendto failed\n");
+                            }
+                            break;
+                        }
+                    case INPUT:
+                        {
+                        kprintf( ": INPUT READING....\n");
+                        msg.dev_id = INPUT;
                         msg.bb_id = BBID;
-                        msg.status = gettemp();
+                        msg.status = getc(INPUT);
                         msg.msg_id++;
                         retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
                         if (retval == SYSERR) {
@@ -247,20 +267,8 @@ process udpserver() {
                         }
                         break;
                     }
-                case INPUT:
-                    {
-                    kprintf( ": INPUT READING....\n");
-                    msg.dev_id = INPUT;
-                    msg.bb_id = BBID;
-                    msg.status = getc(INPUT);
-                    msg.msg_id++;
-                    retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
-                    if (retval == SYSERR) {
-                        fprintf(stderr, ": udp_sendto failed\n");
-                    }
-                    break;
-                }
 
+                }
             }
         }
         kprintf( "sending done\n");
