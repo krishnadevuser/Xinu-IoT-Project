@@ -17,7 +17,7 @@ uint32  remip;          /* remote sender's IP address   */
 uint16  remport;        /* remote sender's UDP port */
 int32   slot;
 uint32 localip;
-
+uint32 i_stat;
 
 /* UDP message struture*/
 struct msg_struct{
@@ -52,14 +52,12 @@ author:         Madhav Agrawal
 **************************************************************************/
 uint32 gettemp(){
 
-    uint32 data[4];
+    char data[4];
     uint32 avg;
     int i ;
     read(TEMP,(char*)data,TEMP_BUF_LEN);
-    for (i=0; i <TEMP_BUF_LEN; i++ ){
-        avg+= (uint32) data[i];
-    }
-    avg = avg/TEMP_BUF_LEN;
+    avg = *(uint32*)data;
+    kprintf("avg = %u",avg);
     return avg;
 
 }
@@ -163,8 +161,9 @@ author:         Madhav Agrawal
         msg.dev_id = INPUT;
         msg.bb_id = BBID;
         msg.status = getc(INPUT);
+        i_stat = msg.status;
         msg.msg_id++;
-        retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
+        retval = udp_sendto(slot, remip, 1111, (char*)&msg,sizeof(struct msg_struct));
         if (retval == SYSERR) {
             fprintf(stderr, ": udp_sendto failed\n");
         }
@@ -176,7 +175,7 @@ author:         Madhav Agrawal
         msg.bb_id = BBID;
         msg.status = gettemp();
         msg.msg_id++;
-        retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
+        retval = udp_sendto(slot, remip, 1111, (char*)&msg,sizeof(struct msg_struct));
         if (retval == SYSERR) {
             fprintf(stderr, ": udp_sendto failed\n");
         }
@@ -219,56 +218,53 @@ process udpserver() {
         }
 
         if (msg.bb_id == BBID){
-            kprintf( ": echo message\n");
-            retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
-            if (retval == SYSERR) {
-                fprintf(stderr, ": udp_sendto failed\n");
-            }
             msg = (struct msg_struct) msg;
-            if (msg.status == BBB_INIT){
-                re
 
-            } else {
-
-                switch(msg.dev_id){
-                    case LED:
-                    {
-                        kprintf( ": TEMP LED = %u\n",msg.status);
-                        if (msg.status >0){
-                            putc(LED,1);
-                        } else {
-                            putc(LED,0);
-                        }
-                        break;
+            switch(msg.dev_id){
+                case LED:
+                {
+                    kprintf( ": TEMP LED = %u\n",msg.status);
+                    if (msg.status >0){
+                        putc(LED,1);
+                    } else {
+                        putc(LED,0);
                     }
-                    case TEMP:
-                        {
-                            kprintf( ": TEMP reading....\n");
-                            msg.dev_id = TEMP;
-                            msg.bb_id = BBID;
-                            msg.status = gettemp();
-                            msg.msg_id++;
-                            retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
-                            if (retval == SYSERR) {
-                                fprintf(stderr, ": udp_sendto failed\n");
-                            }
-                            break;
-                        }
-                    case INPUT:
-                        {
-                        kprintf( ": INPUT READING....\n");
-                        msg.dev_id = INPUT;
+                    kprintf( ": echo message\n");
+                    retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
+                    if (retval == SYSERR) {
+                        fprintf(stderr, ": udp_sendto failed\n");
+                    }
+                    break;
+                }
+                case TEMP:
+                    {
+                        kprintf( ": TEMP reading....\n");
+                        msg.dev_id = TEMP;
                         msg.bb_id = BBID;
-                        msg.status = getc(INPUT);
-                        msg.msg_id++;
+                        msg.status = gettemp();
+                        kprintf( ": TEMP reading....msg.status=%u\n",msg.status);
+                       // msg.msg_id++;
                         retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
                         if (retval == SYSERR) {
                             fprintf(stderr, ": udp_sendto failed\n");
                         }
                         break;
                     }
-
+                case INPUT:
+                    {
+                    kprintf( ": INPUT READING....\n");
+                    msg.dev_id = INPUT;
+                    msg.bb_id = BBID;
+                    msg.status = i_stat;
+                    kprintf( ": INPUT reading....msg.status=%u\n",msg.status);
+                    //msg.msg_id++;
+                    retval = udp_sendto(slot, remip, remport, (char*)&msg,sizeof(struct msg_struct));
+                    if (retval == SYSERR) {
+                        fprintf(stderr, ": udp_sendto failed\n");
+                    }
+                    break;
                 }
+
             }
         }
         kprintf( "sending done\n");
@@ -290,6 +286,7 @@ process	main(void)
 	recvclr();
     kprintf("System Starts\n");
     putc(LED,1);
+
     BB_init();
     putc(LED,0);
     server_id = create(udpserver, 4096, 50, "udpserver",0);

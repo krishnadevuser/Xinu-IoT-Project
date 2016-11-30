@@ -24,11 +24,17 @@ const unsigned int p9_PortIDSet[]={0,	0,	0,	0,	0,	0,	0,	0,
 
 
 /*------------------------------------------------------------------------
- *  ttyinit  -  Initialize buffers and modes for a tty line
+ *  gpioinit  -  Initialize buffers and modes for a GPIO
  *------------------------------------------------------------------------
  */
  unsigned int* PortIDSet_ptr[2];
 
+/**************************************************************************
+function name:  gpioinit_en
+description:    To enable/disable to GPIO Interrupt Mode for rising edge and falling edge detection
+input:          Pointer to GPIO Structure and Address of GPIO's CSR
+author:         Madhav Agrawal   
+**************************************************************************/
 
 void gpioint_en (
 	 struct	gpiocblk *gpioptr,	/* Ptr to gpiotab entry		*/
@@ -47,6 +53,13 @@ void gpioint_en (
 	}
 	
 }
+
+/**************************************************************************
+function name:  gpioinit
+description:    To initialize the port and pin as output/input as per the DDL file
+input:          Pointer to Device Switch Table entry
+author:         Madhav Agrawal   
+**************************************************************************/
 
 devcall	gpioinit(
 	  struct dentry	*devptr		/* Entry in device switch table	*/
@@ -73,6 +86,8 @@ devcall	gpioinit(
 			gpioptr->mode = 0;
 			gpioptr->int_mode = 1;
 	break;
+		default:
+			return SYSERR;
 	}
 	gpioptr->gpiohead = gpioptr->gpiotail = &gpioptr->gpiobuf[0];	
 	*gpioptr->gpiohead = 1;
@@ -83,13 +98,11 @@ devcall	gpioinit(
 	} else {
 		gptr->oe |= (PortIDSet_ptr[gpioptr->port-8][gpioptr->pin-1]);
 		gpioptr->sem = semcreate(0);
-		if (gpioptr->int_mode ) {
-			set_evec( devptr->dvirq, (uint32)devptr->dvintr );
-			gpioint_en(gpioptr,gptr);
-		}
 	}
-	
+	if (gpioptr->int_mode ) {
+		set_evec( devptr->dvirq, (uint32)devptr->dvintr );
+		gpioint_en(gpioptr,gptr);
+	}
 
 	return OK;
 }
-

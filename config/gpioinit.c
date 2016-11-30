@@ -24,7 +24,7 @@ const unsigned int p9_PortIDSet[]={0,	0,	0,	0,	0,	0,	0,	0,
 
 
 /*------------------------------------------------------------------------
- *  ttyinit  -  Initialize buffers and modes for a tty line
+ *  gpioinit  -  Initialize buffers and modes for a GPIO
  *------------------------------------------------------------------------
  */
  unsigned int* PortIDSet_ptr[2];
@@ -60,6 +60,7 @@ description:    To initialize the port and pin as output/input as per the DDL fi
 input:          Pointer to Device Switch Table entry
 author:         Madhav Agrawal   
 **************************************************************************/
+
 devcall	gpioinit(
 	  struct dentry	*devptr		/* Entry in device switch table	*/
 	)
@@ -71,7 +72,7 @@ devcall	gpioinit(
 	PortIDSet_ptr[1]=(unsigned int*)p9_PortIDSet;
 	gpioptr = &gpiotab[ devptr->dvminor ];
 	gptr = (struct gpio_csreg *)devptr->dvcsr;
-	switch(devptr->dvminor){
+	switch(devptr->dvnum){
 //BBB bbb1
 	case 27:
 			gpioptr->port = 8;
@@ -105,4 +106,3 @@ devcall	gpioinit(
 
 	return OK;
 }
-

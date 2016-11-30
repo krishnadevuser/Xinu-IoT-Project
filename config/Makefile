@@ -50,4 +50,3 @@ install:	conf.h conf.c gpioinit.c adcinit.c
 		cp -p conf.c ../system
 		cp -p gpioinit.c ../device/gpio
 		cp -p adcinit.c ../device/adc
-		cp -p main.c ../system
